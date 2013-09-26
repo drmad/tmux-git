@@ -28,7 +28,7 @@ find_git_dirty() {
   fi
 }
 
-function update_tmux {
+update_tmux() {
     # Check for tmux session
     if [ -n "$TMUX" ]; then 
 
