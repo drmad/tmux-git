@@ -1,5 +1,5 @@
 # Taken from http://aaroncrane.co.uk/2009/03/git_branch_prompt/
-function find_git_branch {
+find_git_branch() {
     local dir=. head
     until [ "$dir" -ef / ]; do
         if [ -f "$dir/.git/HEAD" ]; then
