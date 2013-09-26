@@ -34,6 +34,12 @@ The script is prety simple. Basic hacking includes modifying the `LOCATION` (`le
 or `right`) and `STATUS` (the actual text to be written) variables inside the 
 `update_tmux` function for changing the script beavior.
 
+## En español
+
+He realizado un post en español de las instrucciones de instalación en mi blog:
+
+http://drmad.org/blog/branch-de-git-en-tmux.html
+
 [1]: https://github.com/jimeh/git-aware-prompt
 [2]: http://aaroncrane.co.uk/2009/03/git_branch_prompt/
 [3]: http://tmux.sourceforge.net/
