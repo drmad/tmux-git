@@ -17,7 +17,7 @@ modifications to be committed)
 Clone this project in your home directory. Rename the folder with a starting dot for
 hide it:
 
-    git clone git@github.com:drmad/tmux-git.git .tmux-git
+    git clone git://github.com/drmad/tmux-git.git .tmux-git
   
 Then, execute this line to add the script in the Bash initialization file:
 
