@@ -32,9 +32,13 @@ Run `tmux`, `cd` to a Git repo, and enjoy :)
 
 ## Hacking
 
-The script is prety simple. Basic hacking includes modifying the `LOCATION` (`left`
-or `right`) and `STATUS` (the actual text to be written) variables inside the 
-`update_tmux` function for changing the script beavior.
+**Update:** The script is pretty simple. At the top, there are a few variables 
+(and a function) for configuring the script behavior:
+
+* `TMUX_STATUS_LOCATION`: Position of the status on Tmux bar: `left` or `right`
+* `TMUX_OUTREPO_STATUS`: Tmux status for when you're out of a repo. 
+* `TMUX_STATUS_DEFINITION()`: This function sets the `TMUX_STATUS` variable, which
+  is shown in the Tmux bar.
 
 ## En español
 
