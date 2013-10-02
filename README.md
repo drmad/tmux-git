@@ -15,6 +15,8 @@ directory (if it is inside a Git repo) on the right side of the Tmux status bar.
 Also, the branch name turns bright when the repo is 'dirty' (i.e., there are 
 pending modifications to be committed)
 
+**Update:** Now the status shows if there are stashed changes inside the repo.
+
 ## Installation
 
 Clone this project in your home directory, renaming the folder with a starting
