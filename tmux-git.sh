@@ -4,10 +4,10 @@
 # Coded by Oliver Etchebarne - http://drmad.org/
 #
 
-# Location of the status on tmux bar: left or right
+# Position of the status on tmux bar: left or right
 TMUX_STATUS_LOCATION='right'
 
-# Status for where you are out of a repo
+# Status for when you are out of a repo
 TMUX_OUTREPO_STATUS=''
 
 # Function to build the status line. You need to define the $TMUX_STATUS 
