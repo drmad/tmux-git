@@ -114,6 +114,8 @@ update_tmux() {
                             
             fi
         fi
+        
+        export GIT_REPO
     fi
 
 }
