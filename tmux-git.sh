@@ -74,7 +74,6 @@ find_git_stash() {
 }
 
 update_tmux() {
-
     
     # Check for tmux session
     if [ -n "$TMUX" ]; then     
@@ -117,6 +116,13 @@ update_tmux() {
         
         export GIT_REPO
     fi
-
 }
+
+tg_checkout() {
+    if [ "$GIT_REPO" ]; then 
+        tmux split-window -h -l 20
+        tmux respawn-pane -k "~/.tmux-git/bin/tg-checkout.py $GIT_REPO"
+    fi
+}
+
 PROMPT_COMMAND="update_tmux; $PROMPT_COMMAND"
