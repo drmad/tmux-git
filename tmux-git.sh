@@ -83,12 +83,28 @@ update_tmux() {
         LASTREPO_LEN=${#TMUX_GIT_LASTREPO}
         if [ $TMUX_GIT_LASTREPO ] && [ "$TMUX_GIT_LASTREPO" = "${CWD:0:$LASTREPO_LEN}" ]; then
             GIT_REPO=$TMUX_GIT_LASTREPO
+            if $TMUX_GIT_SLOW; then
+                tmux set-window-option status-$TMUX_STATUS_LOCATION "Gathering info..." > /dev/null
+            fi            
 
-            # Get the info
+            # Let's check the time spend
+            start_time=`date +"%s.%N"`
+
             find_git_branch $GIT_REPO
             find_git_stash $GIT_REPO
             find_git_dirty
-    
+            
+            stop_time=`date +"%s.%N"`
+            
+            # If that spent more than a second, the next time we'll show
+            # a message.
+            if [ `echo "$stop_time - $start_time > 1" | bc` -eq '1' ]; then
+                export TMUX_GIT_SLOW=true
+            else
+                export TMUX_GIT_SLOW=false
+            fi
+            
+   
             GIT_FLAGS=($GIT_STASH)
             
             TMUX_STATUS_DEFINITION
