@@ -23,6 +23,13 @@ Clone this project in your home directory, renaming the folder with a starting
 dot for hiding it:
 
     git clone git://github.com/drmad/tmux-git.git ~/.tmux-git
+    
+(Or if you want to test the cutting-bleeding-only-for-macho-men-edge version of
+tmux-git, clone the `dev` branch:
+
+    git clone -b dev git://github.com/drmad/tmux-git.git ~/.tmux-git
+    
+)
   
 Then, execute this line to add the script in the Bash initialization file:
 
