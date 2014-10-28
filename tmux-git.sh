@@ -17,7 +17,7 @@ TMUX_STATUS_DEFINITION() {
     # $GIT_FLAGS ( which is an array of flags ), and pretty much any variable
     # used in this script :-)
     
-    GIT_BRANCH="`basename $GIT_REPO` | branch: $GIT_BRANCH"
+    GIT_BRANCH="`basename "$GIT_REPO"` | branch: $GIT_BRANCH"
     
     TMUX_STATUS="$GIT_BRANCH$GIT_DIRTY"
     
