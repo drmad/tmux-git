@@ -6,7 +6,7 @@ prompt (like [this one][1] and [this one][2], from where I borrowed most parts o
 this script), but I don't like to bloat my prompt. 
 
 So I was thinking where can I put that information, and then I remembered the
-fabulous [Tmux][2].
+fabulous [Tmux][3].
 
 `Tmux` is a powerful and really cool client-server terminal multiplexer, but it
 also provides a nice status bar. This script puts the Git branch of the current
