@@ -35,7 +35,7 @@ find_git_repo() {
     local dir=.
     until [ "$dir" -ef / ]; do
         if [ -f "$dir/.git/HEAD" ]; then
-            GIT_REPO=`readlink -e $dir`
+            GIT_REPO=`readlink -e $dir`/
             return
         fi
         dir="../$dir"
@@ -80,14 +80,15 @@ update_tmux() {
     if [ -n "$TMUX" ]; then     
 
         # This only work if the cwd is outside of the last branch
-        CWD=$(readlink -e $(pwd))
+        CWD=$(readlink -e "$(pwd)")/
         LASTREPO_LEN=${#TMUX_GIT_LASTREPO}
-        if [ $TMUX_GIT_LASTREPO ] && [ "$TMUX_GIT_LASTREPO" = "${CWD:0:$LASTREPO_LEN}" ]; then
-            GIT_REPO=$TMUX_GIT_LASTREPO
+
+        if [[ $TMUX_GIT_LASTREPO ]] && [ "$TMUX_GIT_LASTREPO" = "${CWD:0:$LASTREPO_LEN}" ]; then
+            GIT_REPO="$TMUX_GIT_LASTREPO"
 
             # Get the info
-            find_git_branch $GIT_REPO
-            find_git_stash $GIT_REPO
+            find_git_branch "$GIT_REPO"
+            find_git_stash "$GIT_REPO"
             find_git_dirty
     
             GIT_FLAGS=($GIT_STASH)
@@ -106,8 +107,8 @@ update_tmux() {
         else
             find_git_repo
             
-            if [ "$GIT_REPO" ]; then
-                export TMUX_GIT_LASTREPO=$GIT_REPO
+            if [[ $GIT_REPO ]]; then
+                export TMUX_GIT_LASTREPO="$GIT_REPO"
                 update_tmux
             else
                 tmux set-window-option status-$TMUX_STATUS_LOCATION "$TMUX_OUTREPO_STATUS" > /dev/null
