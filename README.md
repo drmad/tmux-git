@@ -1,5 +1,6 @@
 Git branch in Tmux
 ==================
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/drmad/tmux-git?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 There are many solutions to integrate the current Git branch on your Linux terminal
 prompt (like [this one][1] and [this one][2], from where I borrowed most parts of
