@@ -7,8 +7,11 @@
 # Location of the status on tmux bar: left or right
 TMUX_STATUS_LOCATION='right'
 
+# Current status line, if set already
+CURRENT_STATUS="$(tmux show -vg status-$TMUX_STATUS_LOCATION)"
+
 # Status for where you are out of a repo
-TMUX_OUTREPO_STATUS=''
+TMUX_OUTREPO_STATUS="$CURRENT_STATUS"
 
 # Function to build the status line. You need to define the $TMUX_STATUS 
 # variable.
@@ -19,8 +22,8 @@ TMUX_STATUS_DEFINITION() {
     
     GIT_BRANCH="`basename "$GIT_REPO"` | branch: $GIT_BRANCH"
     
-    TMUX_STATUS="$GIT_BRANCH$GIT_DIRTY"
-    
+    TMUX_STATUS="$GIT_BRANCH$GIT_DIRTY$CURRENT_STATUS"
+
     if [ ${#GIT_FLAGS[@]} -gt 0 ]; then
         TMUX_STATUS="$TMUX_STATUS [$(IFS=,; echo "${GIT_FLAGS[*]}")]"
     fi
@@ -111,6 +114,7 @@ update_tmux() {
                 export TMUX_GIT_LASTREPO="$GIT_REPO"
                 update_tmux
             else
+                tmux set-window-option status-$TMUX_STATUS_LOCATION-attr none > /dev/null
                 tmux set-window-option status-$TMUX_STATUS_LOCATION "$TMUX_OUTREPO_STATUS" > /dev/null
                             
             fi

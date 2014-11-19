@@ -25,9 +25,12 @@ dot for hiding it:
 
     git clone git://github.com/drmad/tmux-git.git ~/.tmux-git
   
-Then, execute this line to add the script in the Bash initialization file:
+Then, add the following lines to your Bash initialization file (usually `.bashrc`):
 
-    echo ". ~/.tmux-git/tmux-git.sh" >> ~/.bashrc
+    # tmux git branch
+    if [[ $TMUX ]]; then
+      source ~/.tmux-git/tmux-git.sh
+    fi
   
 Run `tmux`, `cd` to a Git repo, and enjoy :)
 
@@ -37,7 +40,7 @@ Run `tmux`, `cd` to a Git repo, and enjoy :)
 (and a function) for configuring the script behavior:
 
 * `TMUX_STATUS_LOCATION`: Position of the status on Tmux bar: `left` or `right`
-* `TMUX_OUTREPO_STATUS`: Tmux status for when you're out of a repo. 
+* `TMUX_OUTREPO_STATUS`: Tmux status for when you're out of a repo. Set by default to your pre-existing status line.
 * `TMUX_STATUS_DEFINITION()`: This function sets the `TMUX_STATUS` variable, which
   is shown in the Tmux bar.
 
