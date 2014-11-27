@@ -7,8 +7,9 @@
 # Location of the status on tmux bar: left or right
 TMUX_STATUS_LOCATION='right'
 
-# Status for where you are out of a repo
-TMUX_OUTREPO_STATUS=''
+# Status for where you are out of a repo. Default is your pre-existing status 
+# line. Idea from https://github.com/danarnold
+TMUX_OUTREPO_STATUS=$(tmux show -vg status-$TMUX_STATUS_LOCATION)
 
 # Function to build the status line. You need to define the $TMUX_STATUS 
 # variable.
@@ -74,9 +75,9 @@ find_git_stash() {
 }
 
 update_tmux() {
-
     
-    # Check for tmux session
+    # Check for tmux session. This if will be removed in future revisions, as 
+    # the verification is now done in the .bashrc file
     if [ -n "$TMUX" ]; then     
 
         # This only work if the cwd is outside of the last branch
@@ -101,7 +102,6 @@ update_tmux() {
                 tmux set-window-option status-$TMUX_STATUS_LOCATION-attr none > /dev/null
             fi
             
-            
             tmux set-window-option status-$TMUX_STATUS_LOCATION "$TMUX_STATUS" > /dev/null            
 
         else
@@ -111,11 +111,17 @@ update_tmux() {
                 export TMUX_GIT_LASTREPO="$GIT_REPO"
                 update_tmux
             else
+                # Be sure to unset GIT_DIRTY's bright when leaving a repository.
+                # Idea from https://github.com/danarnold
+                tmux set-window-option status-$TMUX_STATUS_LOCATION-attr none > /dev/null
+
+                # Set the out-repo status
                 tmux set-window-option status-$TMUX_STATUS_LOCATION "$TMUX_OUTREPO_STATUS" > /dev/null
-                            
             fi
         fi
     fi
 
 }
+
+# Update the prompt for execute the script
 PROMPT_COMMAND="update_tmux; $PROMPT_COMMAND"
