@@ -8,7 +8,7 @@ this script), but I don't like to bloat my prompt.
 So I was thinking where can I put that information, and then I remembered the
 fabulous [Tmux][3].
 
-`Tmux` is a powerful and really cool client-server terminal multiplexer, but it
+`tmux` is a powerful and really cool client-server terminal multiplexer, but it
 also provides a nice status bar. This script puts the Git branch of the current
 directory (if it is inside a Git repo) on the right side of the Tmux status bar.
 
@@ -19,26 +19,28 @@ pending modifications to be committed)
 
 ## Installation
 
-Clone this project in your home directory, renaming the folder with a starting
+Clone this project in your home directory, renaming the folder with a preceding
 dot for hiding it:
 
     git clone git://github.com/drmad/tmux-git.git ~/.tmux-git
   
-Then, execute this line to add the script in the Bash initialization file:
+Then, execute this line in a shell to add the script in the Bash initialization 
+file (usually `.bashrc`, replace if needed):
 
-    echo ". ~/.tmux-git/tmux-git.sh" >> ~/.bashrc
+    echo "if [[ \$TMUX ]]; then source ~/.tmux-git/tmux-git.sh; fi" >> ~/.bashrc
   
 Run `tmux`, `cd` to a Git repo, and enjoy :)
 
 ## Hacking
 
-**Update:** The script is pretty simple. At the top, there are a few variables 
-(and a function) for configuring the script behavior:
+The script is pretty simple. At the top of the file `tmux-git.sh`, there are a
+few variables (and a function) for configuring its behavior:
 
 * `TMUX_STATUS_LOCATION`: Position of the status on Tmux bar: `left` or `right`
-* `TMUX_OUTREPO_STATUS`: Tmux status for when you're out of a repo. 
+* `TMUX_OUTREPO_STATUS`: Tmux status for when you're out of a repo. Set by 
+  default to your pre-existing status line. 
 * `TMUX_STATUS_DEFINITION()`: This function sets the `TMUX_STATUS` variable, which
-  is shown in the Tmux bar.
+  is shown in the `tmux` bar.
 
 ## En español
 
