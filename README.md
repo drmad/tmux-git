@@ -29,7 +29,11 @@ Then, execute this line in a shell to add the script in the Bash initialization
 file (usually `.bashrc`, replace if needed):
 
     echo "if [[ \$TMUX ]]; then source ~/.tmux-git/tmux-git.sh; fi" >> ~/.bashrc
-  
+
+If you are using OSX you'll need to install `coreutils`:
+
+    brew install coreutils
+    
 Run `tmux`, `cd` to a Git repo, and enjoy :)
 
 ## Hacking

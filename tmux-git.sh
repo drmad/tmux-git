@@ -36,8 +36,12 @@ find_git_repo() {
     local dir=.
     until [ "$dir" -ef / ]; do
         if [ -f "$dir/.git/HEAD" ]; then
+          if [[ $(uname) == 'Darwin' ]]; then
+            GIT_REPO=`greadlink -e $dir`/
+          else
             GIT_REPO=`readlink -e $dir`/
-            return
+          fi
+        return
         fi
         dir="../$dir"
     done
@@ -79,9 +83,13 @@ update_tmux() {
     # Check for tmux session. This if will be removed in future revisions, as 
     # the verification is now done in the .bashrc file
     if [ -n "$TMUX" ]; then     
-
         # This only work if the cwd is outside of the last branch
-        CWD=$(readlink -e "$(pwd)")/
+        if [[ $(uname) == 'Darwin' ]]; then
+          CWD=$(greadlink -e "$(pwd)")/
+        else
+          CWD=$(readlink -e "$(pwd)")/
+        fi
+
         LASTREPO_LEN=${#TMUX_GIT_LASTREPO}
 
         if [[ $TMUX_GIT_LASTREPO ]] && [ "$TMUX_GIT_LASTREPO" = "${CWD:0:$LASTREPO_LEN}" ]; then
