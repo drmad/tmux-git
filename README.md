@@ -2,21 +2,26 @@ Git branch in Tmux
 ==================
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/drmad/tmux-git?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+`tmux-git` shows information about the `git` repo of the current directory in 
+`tmux` status bar, like current branch, *dirtiness*, stash, etc.
+
+## Overview
+
 There are many solutions to integrate the current Git branch on your Linux terminal
 prompt (like [this one][1] and [this one][2], from where I borrowed most parts of
 this script), but I don't like to bloat my prompt. 
 
 So I was thinking where can I put that information, and then I remembered the
-fabulous [Tmux][3].
+fabulous [Tmux][3]. `tmux` is a powerful and really cool client-server terminal 
+multiplexer, but it also provides a nice status bar. 
 
-`tmux` is a powerful and really cool client-server terminal multiplexer, but it
-also provides a nice status bar. This script puts the Git branch of the current
-directory (if it is inside a Git repo) on the right side of the Tmux status bar.
+This script scans the current `bash` directory for a `git` repo. If it's found, 
+then puts information about it in the status bar, like:
 
-Also, the branch name turns bright when the repo is 'dirty' (i.e., there are 
-pending modifications to be committed)
-
-**Update:** Now the status shows if there are stashed changes inside the repo.
+* Project name (actually, is the `git` repo directory name)
+* Active branch 
+* 'Dirty' status (i.e., there are pending modifications to be committed) 
+* Stashed changes
 
 ## Installation
 
@@ -30,23 +35,26 @@ file (usually `.bashrc`, replace if needed):
 
     echo "if [[ \$TMUX ]]; then source ~/.tmux-git/tmux-git.sh; fi" >> ~/.bashrc
 
-If you are using OSX you'll need to install `coreutils`:
-
-    brew install coreutils
-    
 Run `tmux`, `cd` to a Git repo, and enjoy :)
 
-## Hacking
+**Note for OSX users**: You'll need to install `coreutils`:
 
-The script is pretty simple. At the top of the file `tmux-git.sh`, there are a
-few variables (and a function) for configuring its behavior:
+    brew install coreutils
+
+## Configurarion
+
+The configuration is stored in the file `~/.tmux-git.conf`, created at the first
+run of the script with default values. Just edit it, and reload `tmux`.
+
+### Variables and functions
 
 * `TMUX_STATUS_LOCATION`: Position of the status on Tmux bar: `left` or `right`
 * `TMUX_OUTREPO_STATUS`: Tmux status for when you're out of a repo. Set by 
   default to your pre-existing status line. 
 * `TMUX_STATUS_DEFINITION()`: This function sets the `TMUX_STATUS` variable, which
-  is shown in the `tmux` bar.
-
+  is shown in the `tmux` bar. You can use any variable used across the script for
+  creating this variable.
+  
 ## En español
 
 He realizado un post en español de las instrucciones de instalación en mi blog:
