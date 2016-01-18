@@ -6,7 +6,8 @@
 
 CONFIG_FILE=~/.tmux-git.conf
 
-# Use a different readlink according the OS
+# Use a different readlink according the OS.
+# Kudos to https://github.com/npauzenga for the PR
 if [[ `uname` == 'Darwin' ]]; then
     # Mac
     READLINK='greadlink -e'
@@ -27,7 +28,8 @@ if [ ! -f $CONFIG_FILE ]; then
 TMUX_STATUS_LOCATION='right'
 
 # Status for where you are out of a repo. Default is your pre-existing status 
-# line. Idea from https://github.com/danarnold
+# line. 
+# Kudos to https://github.com/danarnold for the idea.
 TMUX_OUTREPO_STATUS=`tmux show -vg status-$TMUX_STATUS_LOCATION`
 
 # Function to build the status line. You need to define the $TMUX_STATUS 
@@ -96,8 +98,9 @@ find_git_stash() {
 }
 
 update_tmux() {
-    
-    # This only work if the cwd is outside of the last branch
+
+    # The trailing slash is for avoiding conflicts with repos with 
+    # similar names. Kudos to https://github.com/tillt for the bug report
     CWD=`$READLINK "$(pwd)"`/
 
     LASTREPO_LEN=${#TMUX_GIT_LASTREPO}
@@ -130,7 +133,7 @@ update_tmux() {
             update_tmux
         else
             # Be sure to unset GIT_DIRTY's bright when leaving a repository.
-            # Idea from https://github.com/danarnold
+            # Kudos to https://github.com/danarnold for the idea
             tmux set-window-option status-$TMUX_STATUS_LOCATION-attr none > /dev/null
 
             # Set the out-repo status
