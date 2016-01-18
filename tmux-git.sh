@@ -97,48 +97,44 @@ find_git_stash() {
 
 update_tmux() {
     
-    # Check for tmux session. This if will be removed in future revisions, as 
-    # the verification is now done in the .bashrc file
-    if [ -n "$TMUX" ]; then     
-        # This only work if the cwd is outside of the last branch
-        CWD=`$READLINK "$(pwd)"`/
+    # This only work if the cwd is outside of the last branch
+    CWD=`$READLINK "$(pwd)"`/
 
-        LASTREPO_LEN=${#TMUX_GIT_LASTREPO}
+    LASTREPO_LEN=${#TMUX_GIT_LASTREPO}
 
-        if [[ $TMUX_GIT_LASTREPO ]] && [ "$TMUX_GIT_LASTREPO" = "${CWD:0:$LASTREPO_LEN}" ]; then
-            GIT_REPO="$TMUX_GIT_LASTREPO"
+    if [[ $TMUX_GIT_LASTREPO ]] && [ "$TMUX_GIT_LASTREPO" = "${CWD:0:$LASTREPO_LEN}" ]; then
+        GIT_REPO="$TMUX_GIT_LASTREPO"
 
-            # Get the info
-            find_git_branch "$GIT_REPO"
-            find_git_stash "$GIT_REPO"
-            find_git_dirty
-    
-            GIT_FLAGS=($GIT_STASH)
-            
-            TMUX_STATUS_DEFINITION
-            
-            if [ "$GIT_DIRTY" ]; then 
-                tmux set-window-option status-$TMUX_STATUS_LOCATION-attr bright > /dev/null
-            else
-                tmux set-window-option status-$TMUX_STATUS_LOCATION-attr none > /dev/null
-            fi
-            
-            tmux set-window-option status-$TMUX_STATUS_LOCATION "$TMUX_STATUS" > /dev/null            
+        # Get the info
+        find_git_branch "$GIT_REPO"
+        find_git_stash "$GIT_REPO"
+        find_git_dirty
 
+        GIT_FLAGS=($GIT_STASH)
+        
+        TMUX_STATUS_DEFINITION
+        
+        if [ "$GIT_DIRTY" ]; then 
+            tmux set-window-option status-$TMUX_STATUS_LOCATION-attr bright > /dev/null
         else
-            find_git_repo
-            
-            if [[ $GIT_REPO ]]; then
-                export TMUX_GIT_LASTREPO="$GIT_REPO"
-                update_tmux
-            else
-                # Be sure to unset GIT_DIRTY's bright when leaving a repository.
-                # Idea from https://github.com/danarnold
-                tmux set-window-option status-$TMUX_STATUS_LOCATION-attr none > /dev/null
+            tmux set-window-option status-$TMUX_STATUS_LOCATION-attr none > /dev/null
+        fi
+        
+        tmux set-window-option status-$TMUX_STATUS_LOCATION "$TMUX_STATUS" > /dev/null            
 
-                # Set the out-repo status
-                tmux set-window-option status-$TMUX_STATUS_LOCATION "$TMUX_OUTREPO_STATUS" > /dev/null
-            fi
+    else
+        find_git_repo
+        
+        if [[ $GIT_REPO ]]; then
+            export TMUX_GIT_LASTREPO="$GIT_REPO"
+            update_tmux
+        else
+            # Be sure to unset GIT_DIRTY's bright when leaving a repository.
+            # Idea from https://github.com/danarnold
+            tmux set-window-option status-$TMUX_STATUS_LOCATION-attr none > /dev/null
+
+            # Set the out-repo status
+            tmux set-window-option status-$TMUX_STATUS_LOCATION "$TMUX_OUTREPO_STATUS" > /dev/null
         fi
     fi
 
