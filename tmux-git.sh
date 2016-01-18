@@ -1,15 +1,34 @@
 # tmux-git
 # Script for showing current Git branch in Tmux status bar
 #
-# Coded by Oliver Etchebarne - http://drmad.org/
-#
+# Created by Oliver Etchebarne - http://drmad.org/ with contributions
+# from many github users. Thank you all.
+
+CONFIG_FILE=~/.tmux-git.conf
+
+# Use a different readlink according the OS
+if [[ `uname` == 'Darwin' ]]; then
+    # Mac
+    READLINK='greadlink -e'
+else
+    # Linux
+    READLINK='readlink -e'
+fi
+
+# Check for a configuration file.
+# Idea from https://github.com/michael-coleman
+if [ ! -f $CONFIG_FILE ]; then
+    # Doesn't exists. Build a new one.
+    echo tmux-git: Default config file $CONFIG_FILE created.
+    cat <<'EOF' >$CONFIG_FILE
+# tmux-gif configuration file
 
 # Location of the status on tmux bar: left or right
 TMUX_STATUS_LOCATION='right'
 
 # Status for where you are out of a repo. Default is your pre-existing status 
 # line. Idea from https://github.com/danarnold
-TMUX_OUTREPO_STATUS=$(tmux show -vg status-$TMUX_STATUS_LOCATION)
+TMUX_OUTREPO_STATUS=`tmux show -vg status-$TMUX_STATUS_LOCATION`
 
 # Function to build the status line. You need to define the $TMUX_STATUS 
 # variable.
@@ -23,25 +42,23 @@ TMUX_STATUS_DEFINITION() {
     TMUX_STATUS="$GIT_BRANCH$GIT_DIRTY"
     
     if [ ${#GIT_FLAGS[@]} -gt 0 ]; then
-        TMUX_STATUS="$TMUX_STATUS [$(IFS=,; echo "${GIT_FLAGS[*]}")]"
+        TMUX_STATUS="$TMUX_STATUS [`IFS=,; echo "${GIT_FLAGS[*]}"`]"
     fi
 
 }
+EOF
+fi
 
-### CONFIGURATION ENDS HERE.
-### Now let me do the dirty work.
+# Load the config file.
+. $CONFIG_FILE
 
 # Taken from http://aaroncrane.co.uk/2009/03/git_branch_prompt/
 find_git_repo() {
     local dir=.
     until [ "$dir" -ef / ]; do
         if [ -f "$dir/.git/HEAD" ]; then
-          if [[ $(uname) == 'Darwin' ]]; then
-            GIT_REPO=`greadlink -e $dir`/
-          else
-            GIT_REPO=`readlink -e $dir`/
-          fi
-        return
+            GIT_REPO=`$READLINK $dir`/
+            return
         fi
         dir="../$dir"
     done
@@ -84,11 +101,7 @@ update_tmux() {
     # the verification is now done in the .bashrc file
     if [ -n "$TMUX" ]; then     
         # This only work if the cwd is outside of the last branch
-        if [[ $(uname) == 'Darwin' ]]; then
-          CWD=$(greadlink -e "$(pwd)")/
-        else
-          CWD=$(readlink -e "$(pwd)")/
-        fi
+        CWD=`$READLINK "$(pwd)"`/
 
         LASTREPO_LEN=${#TMUX_GIT_LASTREPO}
 
