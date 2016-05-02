@@ -22,7 +22,7 @@ if [ ! -f $CONFIG_FILE ]; then
     # Doesn't exists. Build a new one.
     echo tmux-git: Default config file $CONFIG_FILE created.
     cat <<'EOF' >$CONFIG_FILE
-# tmux-gif configuration file
+# tmux-git configuration file
 
 # Location of the status on tmux bar: left or right
 TMUX_STATUS_LOCATION='right'
