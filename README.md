@@ -1,6 +1,6 @@
 Git branch in Tmux
 ==================
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/drmad/tmux-git?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/drmad/tmux-git)
 
 `tmux-git` shows information about the `git` repo of the current directory in 
 `tmux` status bar, like current branch, *dirtiness*, stash, etc.
