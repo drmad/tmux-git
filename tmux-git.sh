@@ -32,12 +32,18 @@ TMUX_STATUS_LOCATION='right'
 # Kudos to https://github.com/danarnold for the idea.
 TMUX_OUTREPO_STATUS=`tmux show -vg status-$TMUX_STATUS_LOCATION`
 
+# Define colour of tmux-git text
+# some basic colour values you could use are: 36=blue, 136=yellow, 0=black
+text_fg=7 # 7=white
+
 # Function to build the status line. You need to define the $TMUX_STATUS 
 # variable.
 TMUX_STATUS_DEFINITION() {
     # You can use any tmux status variables, and $GIT_BRANCH, $GIT_DIRTY, 
     # $GIT_FLAGS ( which is an array of flags ), and pretty much any variable
     # used in this script :-)
+    
+    tmux set-option status-$TMUX_STATUS_LOCATION-fg colour$text_fg > /dev/null
     
     GIT_BRANCH="`basename "$GIT_REPO"` | branch: $GIT_BRANCH"
     
