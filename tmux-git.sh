@@ -5,7 +5,7 @@
 # from many github users. Thank you all.
 
 CONFIG_FILE=~/.tmux-git.conf
-TMUX_VER=$(tmux -V | cut -d ' ' -f2 | tr -d . )
+TMUX_VER=$(tmux -V | sed 's/[^0-9]*//g' )
 
 if [ $TMUX_VER -ge 29 ]; then
 	# If tmux version is 2.9 or greater, use status-left-style and
