@@ -5,16 +5,6 @@
 # from many github users. Thank you all.
 
 CONFIG_FILE=~/.tmux-git.conf
-TMUX_VER=$(tmux -V | sed 's/[^0-9]*//g' )
-
-if [ $TMUX_VER -ge 29 ]; then
-	# If tmux version is 2.9 or greater, use status-left-style and
-	# status-right-style instead of status-left-attr and
-	# status-right-attr
-	TMUX_ATTR="-style"
-else
-	TMUX_ATTR="-attr"
-fi
 
 # Use a different readlink according the OS.
 # Kudos to https://github.com/npauzenga for the PR
@@ -128,9 +118,9 @@ update_tmux() {
         TMUX_STATUS_DEFINITION
         
         if [ "$GIT_DIRTY" ]; then 
-            tmux set-window-option status-$TMUX_STATUS_LOCATION$TMUX_ATTR bright > /dev/null
+            tmux set-window-option status-$TMUX_STATUS_LOCATION-style bright > /dev/null
         else
-            tmux set-window-option status-$TMUX_STATUS_LOCATION$TMUX_ATTR none > /dev/null
+            tmux set-window-option status-$TMUX_STATUS_LOCATION-style none > /dev/null
         fi
         
         tmux set-window-option status-$TMUX_STATUS_LOCATION "$TMUX_STATUS" > /dev/null            
@@ -144,7 +134,7 @@ update_tmux() {
         else
             # Be sure to unset GIT_DIRTY's bright when leaving a repository.
             # Kudos to https://github.com/danarnold for the idea
-            tmux set-window-option status-$TMUX_STATUS_LOCATION$TMUX_ATTR none > /dev/null
+            tmux set-window-option status-$TMUX_STATUS_LOCATION-style none > /dev/null
 
             # Set the out-repo status
             tmux set-window-option status-$TMUX_STATUS_LOCATION "$TMUX_OUTREPO_STATUS" > /dev/null
