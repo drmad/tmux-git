@@ -28,7 +28,7 @@ then puts information about it in the status bar, like:
 Clone this project in your home directory, renaming the folder with a preceding
 dot for hiding it:
 
-    git clone git://github.com/drmad/tmux-git.git ~/.tmux-git
+    git clone https://github.com/drmad/tmux-git.git ~/.tmux-git
   
 Then, execute this line in a shell to add the script in the Bash initialization 
 file (usually `.bashrc`, replace if needed):
