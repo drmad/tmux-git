@@ -143,12 +143,12 @@ update_tmux() {
 
 # Update the prompt for execute the script
 case $SHELL in
-    *bash)
-        PROMPT_COMMAND="update_tmux; $PROMPT_COMMAND"
-        ;;
     *zsh)
         if ! (($precmd_functions[(Ie)update_tmux])); then
             precmd_functions=($precmd_functions update_tmux)
         fi
+        ;;
+    *)
+        PROMPT_COMMAND="update_tmux; $PROMPT_COMMAND"
         ;;
 esac
