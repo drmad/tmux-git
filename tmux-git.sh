@@ -8,12 +8,10 @@ CONFIG_FILE=~/.tmux-git.conf
 
 # Use a different readlink according the OS.
 # Kudos to https://github.com/npauzenga for the PR
-if [[ `uname` == 'Darwin' ]]; then
-    # Mac
-    READLINK='greadlink -e'
-else
-    # Linux
-    READLINK='readlink -e'
+if [[ `uname` == 'Darwin' ]]; then # Mac
+    READLINK='greadlink'
+else # Linux
+    READLINK='readlink'
 fi
 
 # Check for a configuration file.
@@ -59,7 +57,7 @@ find_git_repo() {
     local dir=.
     until [ "$dir" -ef / ]; do
         if [ -f "$dir/.git/HEAD" ]; then
-            GIT_REPO=`$READLINK $dir`/
+            GIT_REPO=`$READLINK -e $dir`/
             return
         fi
         dir="../$dir"
@@ -81,8 +79,7 @@ find_git_branch() {
 
 # Taken from https://github.com/jimeh/git-aware-prompt
 find_git_dirty() {
-  local status=$(git status --porcelain 2> /dev/null)
-  if [[ "$status" != "" ]]; then
+  if [[ "$(git status --porcelain 2> /dev/null)" != "" ]]; then
     GIT_DIRTY='*'
   else
     GIT_DIRTY=''
@@ -101,7 +98,7 @@ update_tmux() {
 
     # The trailing slash is for avoiding conflicts with repos with 
     # similar names. Kudos to https://github.com/tillt for the bug report
-    CWD=`$READLINK "$(pwd)"`/
+    CWD=`$READLINK -e "$(pwd)"`/
 
     LASTREPO_LEN=${#TMUX_GIT_LASTREPO}
 
@@ -143,5 +140,15 @@ update_tmux() {
 
 }
 
+
 # Update the prompt for execute the script
-PROMPT_COMMAND="update_tmux; $PROMPT_COMMAND"
+case $SHELL in
+    *zsh)
+        if ! (($precmd_functions[(Ie)update_tmux])); then
+            precmd_functions=($precmd_functions update_tmux)
+        fi
+        ;;
+    *)
+        PROMPT_COMMAND="update_tmux; $PROMPT_COMMAND"
+        ;;
+esac
