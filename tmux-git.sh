@@ -25,22 +25,22 @@ if [ ! -f $CONFIG_FILE ]; then
 # Location of the status on tmux bar: left or right
 TMUX_STATUS_LOCATION='right'
 
-# Status for where you are out of a repo. Default is your pre-existing status 
-# line. 
+# Status for where you are out of a repo. Default is your pre-existing status
+# line.
 # Kudos to https://github.com/danarnold for the idea.
 TMUX_OUTREPO_STATUS=`tmux show -vg status-$TMUX_STATUS_LOCATION`
 
-# Function to build the status line. You need to define the $TMUX_STATUS 
+# Function to build the status line. You need to define the $TMUX_STATUS
 # variable.
 TMUX_STATUS_DEFINITION() {
-    # You can use any tmux status variables, and $GIT_BRANCH, $GIT_DIRTY, 
+    # You can use any tmux status variables, and $GIT_BRANCH, $GIT_DIRTY,
     # $GIT_FLAGS ( which is an array of flags ), and pretty much any variable
     # used in this script :-)
-    
+
     GIT_BRANCH="`basename "$GIT_REPO"` | branch: $GIT_BRANCH"
-    
+
     TMUX_STATUS="$GIT_BRANCH$GIT_DIRTY"
-    
+
     if [ ${#GIT_FLAGS[@]} -gt 0 ]; then
         TMUX_STATUS="$TMUX_STATUS [`IFS=,; echo "${GIT_FLAGS[*]}"`]"
     fi
@@ -96,7 +96,7 @@ find_git_stash() {
 
 update_tmux() {
 
-    # The trailing slash is for avoiding conflicts with repos with 
+    # The trailing slash is for avoiding conflicts with repos with
     # similar names. Kudos to https://github.com/tillt for the bug report
     CWD=`$READLINK -e "$(pwd)"`/
 
@@ -111,20 +111,20 @@ update_tmux() {
         find_git_dirty
 
         GIT_FLAGS=($GIT_STASH)
-        
+
         TMUX_STATUS_DEFINITION
-        
-        if [ "$GIT_DIRTY" ]; then 
+
+        if [ "$GIT_DIRTY" ]; then
             tmux set-window-option status-$TMUX_STATUS_LOCATION-style bright > /dev/null
         else
             tmux set-window-option status-$TMUX_STATUS_LOCATION-style none > /dev/null
         fi
-        
-        tmux set-window-option status-$TMUX_STATUS_LOCATION "$TMUX_STATUS" > /dev/null            
+
+        tmux set-window-option status-$TMUX_STATUS_LOCATION "$TMUX_STATUS" > /dev/null
 
     else
         find_git_repo
-        
+
         if [[ $GIT_REPO ]]; then
             export TMUX_GIT_LASTREPO="$GIT_REPO"
             update_tmux
@@ -149,6 +149,8 @@ case $SHELL in
         fi
         ;;
     *)
-        PROMPT_COMMAND="update_tmux; $PROMPT_COMMAND"
+        if [[ $PROMPT_COMMAND != *update_tmux* ]]; then
+            PROMPT_COMMAND="update_tmux; $PROMPT_COMMAND"
+        fi
         ;;
 esac
